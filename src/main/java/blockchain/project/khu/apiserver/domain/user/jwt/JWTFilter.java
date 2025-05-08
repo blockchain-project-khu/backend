@@ -36,14 +36,8 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        String authHeader = request.getHeader("Authorization");
+        String access = request.getHeader("access");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.warn("Missing or invalid Authorization header");
-            throw new JWTException.TokenNullException();
-        }
-
-        String access = authHeader.substring(7); // "Bearer " 이후 토큰만 추출
 
         // validation1 - token null
         if (access == null) {
