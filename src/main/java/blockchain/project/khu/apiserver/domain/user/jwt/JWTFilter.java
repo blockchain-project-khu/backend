@@ -36,7 +36,14 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        String access = request.getHeader("access");
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("Missing or invalid Authorization header");
+            throw new JWTException.TokenNullException();
+        }
+
+        String access = authHeader.substring(7); // "Bearer " 이후 토큰만 추출
 
         // validation1 - token null
         if (access == null) {
@@ -60,10 +67,12 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String username = jwtUtil.getUsername(access);
         String role = jwtUtil.getRole(access);
+        Long id = jwtUtil.getId(access);
 
         UserAccessDto userAccessDto = UserAccessDto.builder()
                 .username(username)
                 .role(role)
+                .id(id)
                 .build();
 
         // USER
@@ -79,8 +88,5 @@ public class JWTFilter extends OncePerRequestFilter {
         else{
             filterChain.doFilter(request, response);
         }
-
-
-
     }
 }
