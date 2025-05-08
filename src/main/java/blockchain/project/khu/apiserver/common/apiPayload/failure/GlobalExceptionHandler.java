@@ -1,8 +1,10 @@
 package blockchain.project.khu.apiserver.common.apiPayload.failure;
 
+import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.FundingException;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.JWTException;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.PropertyException;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.UserException;
+import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptionStatus.FundingExceptionStatus;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptionStatus.JWTExceptionStatus;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptionStatus.PropertyExceptionStatus;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptionStatus.UserExceptionStatus;
@@ -143,4 +145,99 @@ public class GlobalExceptionHandler {
                         )
                 );
     }
+
+    // [FUNDING]
+    @ExceptionHandler(FundingException.FundingNotFoundException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(FundingException.FundingNotFoundException e){
+        log.error("[GlobalExceptionHandler FundingException.FUNDING_NOT_FOUND occurred");
+        return ResponseEntity
+                .status(
+                        FundingExceptionStatus.FUNDING_NOT_FOUND.getHttpStatus()
+                )
+                .body(
+                        new ExceptionApiResponse(
+                                false, FundingExceptionStatus.FUNDING_NOT_FOUND.getCode(), FundingExceptionStatus.FUNDING_NOT_FOUND.getMessage()
+                        )
+                );
+    }
+
+    @ExceptionHandler(FundingException.UnauthorizedAccessException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(FundingException.UnauthorizedAccessException e){
+        log.error("[GlobalExceptionHandler FundingException.FUNDING_UNAUTHORIZED_ACCESS occurred");
+        return ResponseEntity
+                .status(
+                        FundingExceptionStatus.FUNDING_UNAUTHORIZED_ACCESS.getHttpStatus()
+                )
+                .body(
+                        new ExceptionApiResponse(
+                                false, FundingExceptionStatus.FUNDING_UNAUTHORIZED_ACCESS.getCode(), FundingExceptionStatus.FUNDING_UNAUTHORIZED_ACCESS.getMessage()
+                        )
+                );
+    }
+
+    @ExceptionHandler(FundingException.FundingDuplicateException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(FundingException.FundingDuplicateException e){
+        log.error("[GlobalExceptionHandler] FundingException.FUNDING_DUPLICATE occurred");
+        return ResponseEntity
+                .status(FundingExceptionStatus.FUNDING_DUPLICATE.getHttpStatus())
+                .body(new ExceptionApiResponse(
+                        false,
+                        FundingExceptionStatus.FUNDING_DUPLICATE.getCode(),
+                        FundingExceptionStatus.FUNDING_DUPLICATE.getMessage()
+                ));
+    }
+
+
+    // [FUNDING - 이미 신청된 펀딩]
+    @ExceptionHandler(FundingException.FundingAlreadyAppliedException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(FundingException.FundingAlreadyAppliedException e){
+        log.error("[GlobalExceptionHandler] FundingException.FUNDING_ALREADY_APPLIED occurred");
+        return ResponseEntity
+                .status(FundingExceptionStatus.FUNDING_ALREADY_APPLIED.getHttpStatus())
+                .body(new ExceptionApiResponse(
+                        false,
+                        FundingExceptionStatus.FUNDING_ALREADY_APPLIED.getCode(),
+                        FundingExceptionStatus.FUNDING_ALREADY_APPLIED.getMessage()
+                ));
+    }
+
+    // [FUNDING - 이미 완료된 펀딩]
+    @ExceptionHandler(FundingException.FundingAlreadySuccessException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(FundingException.FundingAlreadySuccessException e){
+        log.error("[GlobalExceptionHandler] FundingException.FUNDING_ALREADY_SUCCESS occurred");
+        return ResponseEntity
+                .status(FundingExceptionStatus.FUNDING_ALREADY_SUCCESS.getHttpStatus())
+                .body(new ExceptionApiResponse(
+                        false,
+                        FundingExceptionStatus.FUNDING_ALREADY_SUCCESS.getCode(),
+                        FundingExceptionStatus.FUNDING_ALREADY_SUCCESS.getMessage()
+                ));
+    }
+
+    // [FUNDING - 펀딩 마감 상태]
+    @ExceptionHandler(FundingException.FundingClosedException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(FundingException.FundingClosedException e){
+        log.error("[GlobalExceptionHandler] FundingException.FUNDING_CLOSED occurred");
+        return ResponseEntity
+                .status(FundingExceptionStatus.FUNDING_CLOSED.getHttpStatus())
+                .body(new ExceptionApiResponse(
+                        false,
+                        FundingExceptionStatus.FUNDING_CLOSED.getCode(),
+                        FundingExceptionStatus.FUNDING_CLOSED.getMessage()
+                ));
+    }
+
+    // [FUNDING - 펀딩 취소 불가 상태]
+    @ExceptionHandler(FundingException.FundingCancelNotAllowedException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(FundingException.FundingCancelNotAllowedException e){
+        log.error("[GlobalExceptionHandler] FundingException.FUNDING_CANCEL_NOT_ALLOWED occurred");
+        return ResponseEntity
+                .status(FundingExceptionStatus.FUNDING_CANCEL_NOT_ALLOWED.getHttpStatus())
+                .body(new ExceptionApiResponse(
+                        false,
+                        FundingExceptionStatus.FUNDING_CANCEL_NOT_ALLOWED.getCode(),
+                        FundingExceptionStatus.FUNDING_CANCEL_NOT_ALLOWED.getMessage()
+                ));
+    }
+
 }

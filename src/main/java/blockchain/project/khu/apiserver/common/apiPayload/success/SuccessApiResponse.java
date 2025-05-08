@@ -1,6 +1,8 @@
 package blockchain.project.khu.apiserver.common.apiPayload.success;
 
 import blockchain.project.khu.apiserver.common.apiPayload.BaseApiResponse;
+import blockchain.project.khu.apiserver.domain.funding.dto.request.FundingRequestDto;
+import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingResponseDto;
 import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyResponseDto;
 import blockchain.project.khu.apiserver.domain.user.dto.response.LoginResponse;
 import com.sun.net.httpserver.Authenticator;
@@ -51,5 +53,26 @@ public class SuccessApiResponse <T> extends BaseApiResponse {
 
     public static SuccessApiResponse<Void> deleteProperty() {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "매물 삭제 성공", null);
+    }
+
+    // [FUNDING]
+    public static SuccessApiResponse<Long> createFunding(Long fundingId) {
+        return new SuccessApiResponse<>(true, HttpStatus.CREATED.toString(), "펀딩 등록 성공", fundingId);
+    }
+
+    public static SuccessApiResponse<FundingResponseDto> getFunding(FundingResponseDto responseDto) {
+        return new SuccessApiResponse<>(true, HttpStatus.FOUND.toString(), "펀딩 조회 성공", responseDto);
+    }
+
+    public static SuccessApiResponse<List<FundingResponseDto>> getFunding(List<FundingResponseDto> responseDtoList) {
+        return new SuccessApiResponse<>(true, HttpStatus.FOUND.toString(), "펀딩 조회 성공", responseDtoList);
+    }
+
+    public static SuccessApiResponse<FundingResponseDto> updateFunding(FundingResponseDto responseDto) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "펀딩 수정 성공", responseDto);
+    }
+
+    public static SuccessApiResponse<Void> deleteFunding() {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "펀딩 삭제 성공", null);
     }
 }
