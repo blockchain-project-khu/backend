@@ -1,8 +1,10 @@
 package blockchain.project.khu.apiserver.common.apiPayload.failure;
 
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.JWTException;
+import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.PropertyException;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.UserException;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptionStatus.JWTExceptionStatus;
+import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptionStatus.PropertyExceptionStatus;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptionStatus.UserExceptionStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -109,6 +111,35 @@ public class GlobalExceptionHandler {
                 .body(
                         new ExceptionApiResponse(
                                 false, UserExceptionStatus.USERNAME_NOT_EXIST.getCode(), UserExceptionStatus.USERNAME_NOT_EXIST.getMessage()
+                        )
+                );
+    }
+
+    // [PROPERTY]
+    @ExceptionHandler(PropertyException.PropertyNotFound.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(PropertyException.PropertyNotFound e){
+        log.error("[GlobalExceptionHandler PropertyException.PROPERTY_NOT_FOUND occurred");
+        return ResponseEntity
+                .status(
+                        PropertyExceptionStatus.PROPERTY_NOT_FOUND.getHttpStatus()
+                )
+                .body(
+                        new ExceptionApiResponse(
+                                false, PropertyExceptionStatus.PROPERTY_NOT_FOUND.getCode(), PropertyExceptionStatus.PROPERTY_NOT_FOUND.getMessage()
+                        )
+                );
+    }
+
+    @ExceptionHandler(PropertyException.PropertyInvalidInputException.class)
+    public ResponseEntity<ExceptionApiResponse> handleException(PropertyException.PropertyInvalidInputException e){
+        log.error("[GlobalExceptionHandler PropertyException.PropertyInvalidInputException occurred");
+        return ResponseEntity
+                .status(
+                        PropertyExceptionStatus.PROPERTY_INVALID_INPUT.getHttpStatus()
+                )
+                .body(
+                        new ExceptionApiResponse(
+                                false, PropertyExceptionStatus.PROPERTY_INVALID_INPUT.getCode(), PropertyExceptionStatus.PROPERTY_INVALID_INPUT.getMessage()
                         )
                 );
     }

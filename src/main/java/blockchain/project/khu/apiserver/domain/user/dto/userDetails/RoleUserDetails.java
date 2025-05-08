@@ -31,6 +31,8 @@ public class RoleUserDetails implements UserDetails {
         return userAccessDto.getUsername();
     }
 
+    public Long getUserId(){ return userAccessDto.getId();}
+
     @Override
     public boolean isAccountNonExpired() {
         return UserDetails.super.isAccountNonExpired();
