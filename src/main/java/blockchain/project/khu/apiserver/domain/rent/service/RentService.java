@@ -26,7 +26,7 @@ public class RentService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매물입니다."));
 
         Rent rent = Rent.builder()
-                .tenant(user)
+                .user(user)
                 .property(property)
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
