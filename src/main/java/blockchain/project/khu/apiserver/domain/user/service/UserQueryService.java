@@ -3,8 +3,8 @@ package blockchain.project.khu.apiserver.domain.user.service;
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.UserException;
 import blockchain.project.khu.apiserver.domain.user.dto.request.LoginRequest;
 import blockchain.project.khu.apiserver.domain.user.entity.User;
-import blockchain.project.khu.apiserver.domain.user.jwt.JWTUtil;
 import blockchain.project.khu.apiserver.domain.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,5 +31,10 @@ public class UserQueryService {
         }
 
         return user.getUsername();
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자 ID: " + userId));
     }
 }

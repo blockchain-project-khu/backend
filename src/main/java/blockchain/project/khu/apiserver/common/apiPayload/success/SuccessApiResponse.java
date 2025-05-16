@@ -1,11 +1,11 @@
 package blockchain.project.khu.apiserver.common.apiPayload.success;
 
 import blockchain.project.khu.apiserver.common.apiPayload.BaseApiResponse;
-import blockchain.project.khu.apiserver.domain.funding.dto.request.FundingRequestDto;
 import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingResponseDto;
+import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyResponseDto;
+import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.user.dto.response.LoginResponse;
-import com.sun.net.httpserver.Authenticator;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -74,5 +74,27 @@ public class SuccessApiResponse <T> extends BaseApiResponse {
 
     public static SuccessApiResponse<Void> deleteFunding() {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "펀딩 삭제 성공", null);
+    }
+
+
+    // [RENT-PAYMENT]
+    public static SuccessApiResponse<RentPaymentResponseDto> payRent(RentPaymentResponseDto responseDto) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "월세 납부 성공", responseDto);
+    }
+
+    public static SuccessApiResponse<List<RentPaymentResponseDto>> getMyPayments(List<RentPaymentResponseDto> result) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "월세 납부 내역 조회 성공", result);
+    }
+
+    public static SuccessApiResponse<List<PropertyPaymentResponseDto>> getPaymentsByProperty(List<PropertyPaymentResponseDto> result) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "등록한 매물별 월세 조회 성공", result);
+    }
+
+    public static SuccessApiResponse<List<RentPaymentResponseDto>> getPaymentsByPropertyId(List<RentPaymentResponseDto> result) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "특정 매물 월세 납부 내역 조회 성공", result);
+    }
+
+    public static <T> SuccessApiResponse<T> success(T data, String message) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), message, data);
     }
 }
