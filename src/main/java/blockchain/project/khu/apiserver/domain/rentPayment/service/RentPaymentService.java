@@ -1,6 +1,8 @@
 package blockchain.project.khu.apiserver.domain.rentPayment.service;
 
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.RentException;
+import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyPaymentResponseDto;
+import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
 import blockchain.project.khu.apiserver.domain.rent.entity.Rent;
 import blockchain.project.khu.apiserver.domain.rent.repository.RentRepository;
 import blockchain.project.khu.apiserver.domain.rentPayment.dto.request.RentPaymentRequestDto;
@@ -20,6 +22,7 @@ public class RentPaymentService {
 
     private final RentRepository rentRepository;
     private final RentPaymentRepository rentPaymentRepository;
+    private final PropertyRepository propertyRepository;
 
     @Transactional
     public RentPaymentResponseDto payRent(RentPaymentRequestDto requestDto) {
@@ -38,6 +41,25 @@ public class RentPaymentService {
         return rents.stream()
                 .flatMap(rent -> rentPaymentRepository.findByRentId(rent.getId()).stream())
                 .map(RentPaymentResponseDto::fromEntity)
+                .toList();
+    }
+
+    public List<PropertyPaymentResponseDto> getReceivedByProperty(Long ownerId) {
+        return propertyRepository.findByUserId(ownerId)
+                .stream()
+                .map(property -> {
+                    List<Long> rentIds = rentRepository
+                            .findByPropertyId(property.getId())
+                            .stream()
+                            .map(Rent::getId)
+                            .toList();
+
+                    List<RentPayment> payments = rentIds.stream()
+                            .flatMap(id -> rentPaymentRepository.findByRentId(id).stream())
+                            .toList();
+
+                    return PropertyPaymentResponseDto.fromEntity(property, payments);
+                })
                 .toList();
     }
 }
