@@ -41,4 +41,12 @@ public class RentPaymentController {
         List<PropertyPaymentResponseDto> result = rentPaymentService.getReceivedByProperty(user.getId());
         return SuccessApiResponse.getPaymentsByProperty(result);
     }
+
+    @GetMapping("/property/{propertyId}")
+    public SuccessApiResponse<List<RentPaymentResponseDto>> getPaymentsByPropertyId(
+            @PathVariable Long propertyId
+    ) {
+        List<RentPaymentResponseDto> result = rentPaymentService.getPaymentsByPropertyId(propertyId);
+        return SuccessApiResponse.getPaymentsByPropertyId(result);
+    }
 }
