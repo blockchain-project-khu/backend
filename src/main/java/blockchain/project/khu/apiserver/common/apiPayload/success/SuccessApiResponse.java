@@ -78,4 +78,8 @@ public class SuccessApiResponse <T> extends BaseApiResponse {
     public static SuccessApiResponse<RentPaymentResponseDto> payRent(RentPaymentResponseDto responseDto) {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "월세 납부 성공", responseDto);
     }
+
+    public static SuccessApiResponse<List<RentPaymentResponseDto>> getMyPayments(List<RentPaymentResponseDto> result) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "월세 납부 내역 조회 성공", result);
+    }
 }

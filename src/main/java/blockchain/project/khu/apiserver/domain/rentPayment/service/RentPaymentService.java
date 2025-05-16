@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -28,5 +30,14 @@ public class RentPaymentService {
         RentPayment saved = rentPaymentRepository.save(payment);
 
         return RentPaymentResponseDto.fromEntity(saved);
+    }
+
+    public List<RentPaymentResponseDto> getMyPayments(Long userId) {
+        List<Rent> rents = rentRepository.findByUserId(userId);
+
+        return rents.stream()
+                .flatMap(rent -> rentPaymentRepository.findByRentId(rent.getId()).stream())
+                .map(RentPaymentResponseDto::fromEntity)
+                .toList();
     }
 }
