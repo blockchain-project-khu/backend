@@ -31,7 +31,7 @@ public class FundingResponseDto {
     public static FundingResponseDto fromEntity(Funding funding) {
         return new FundingResponseDto(
                 funding.getId(),
-                funding.getAmount(),
+                funding.getPercentage(),
                 funding.getStatus(),
                 funding.getUser().getId(),
                 funding.getProperty().getId()
