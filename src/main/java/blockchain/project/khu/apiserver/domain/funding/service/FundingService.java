@@ -45,7 +45,25 @@ public class FundingService {
 //            throw new FundingException.FundingClosedException();
 //        }
 
+        // 기존 합산 퍼센트 조회
+        int existingSum = property.getFundings().stream()
+                .mapToInt(Funding::getPercentage)
+                .sum();
+
+        // 100% 초과 여부 검사
+        if (existingSum + requestDto.getPercentage() > 100) {
+            throw new RuntimeException(
+                    "이미 진행된 퍼센트(" + existingSum + "%) + 요청 퍼센트("
+                            + requestDto.getPercentage() + "%)가 100%를 초과합니다.");
+        }
+
         Funding funding = requestDto.toEntity(user, property, requestDto);
+        property.addFundingEntity(funding);
+
+        if(property.getCurrentFundingPercent() == 100) {
+            property.updatePropertyStatus();
+        }
+
         return fundingRepository.save(funding).getId();
     }
 
