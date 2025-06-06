@@ -60,6 +60,10 @@ public class FundingService {
         Funding funding = requestDto.toEntity(user, property, requestDto);
         property.addFundingEntity(funding);
 
+        if(property.getCurrentFundingPercent() == 100) {
+            property.updatePropertyStatus();
+        }
+
         return fundingRepository.save(funding).getId();
     }
 

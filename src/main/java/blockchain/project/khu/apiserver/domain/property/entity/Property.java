@@ -83,4 +83,8 @@ public class Property {
         int newSum = this.currentFundingPercent + funding.getPercentage();
         this.currentFundingPercent = Math.min(newSum, 100);
     }
+
+    public void updatePropertyStatus() {
+        this.status = PropertyStatus.SOLD;
+    }
 }
