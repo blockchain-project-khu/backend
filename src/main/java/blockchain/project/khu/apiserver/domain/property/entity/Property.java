@@ -19,7 +19,6 @@ import java.util.List;
 public class Property {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "property_id")
     private Long id;
 
@@ -60,8 +59,16 @@ public class Property {
     private String imageUrl;
 
     // 지금까지 모인 퍼센트를 캐시 (0 ~ 100)
-    @Column(nullable = false)
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     private Integer currentFundingPercent = 0;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.currentFundingPercent == null) {
+            this.currentFundingPercent = 0;
+        }
+    }
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Funding> fundings = new ArrayList<>();

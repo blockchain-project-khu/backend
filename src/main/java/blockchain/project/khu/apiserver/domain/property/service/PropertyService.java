@@ -8,11 +8,8 @@ import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyRes
 import blockchain.project.khu.apiserver.domain.property.entity.Property;
 import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
 import blockchain.project.khu.apiserver.domain.user.entity.User;
-import blockchain.project.khu.apiserver.domain.user.jwt.JWTUtil;
 import blockchain.project.khu.apiserver.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,9 +30,6 @@ public class PropertyService {
         Long userId = SecurityUtil.getCurrentMemberId();
         User user = userRepository.findById(userId).orElseThrow(UserException.UsernameNotExistException::new);
 
-        Property property = request.toEntity(user);
-        Property savedProperty = propertyRepository.save(property);
-
         // 1. 블록체인 등록 전 propertyCount 조회
         BigInteger beforeCount;
         try {
@@ -43,6 +37,13 @@ public class PropertyService {
         } catch (Exception ex) {
             throw new RuntimeException("블록체인에서 propertyCount 조회 실패", ex);
         }
+
+        BigInteger newBlockchainIdBI = beforeCount.add(BigInteger.ONE);
+        Long newBlockchainId = newBlockchainIdBI.longValue();
+
+        Property property = request.toEntity(user, newBlockchainId);
+        Property savedProperty = propertyRepository.save(property);
+
 
         // 2. 블록체인에 registerProperty 트랜잭션 전송
         try {
@@ -82,7 +83,6 @@ public class PropertyService {
                     ex
             );
         }
-
         return PropertyResponseDto.fromEntity(property);
     }
 

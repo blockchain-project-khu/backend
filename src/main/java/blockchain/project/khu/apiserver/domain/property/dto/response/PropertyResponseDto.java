@@ -2,9 +2,8 @@ package blockchain.project.khu.apiserver.domain.property.dto.response;
 
 import blockchain.project.khu.apiserver.domain.property.entity.Property;
 import blockchain.project.khu.apiserver.domain.property.entity.PropertyStatus;
-import blockchain.project.khu.apiserver.domain.user.entity.User;
+import blockchain.project.khu.apiserver.domain.property.entity.PropertyType;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
@@ -16,6 +15,7 @@ public class PropertyResponseDto {
     private String address;
     private String description;
     private PropertyStatus status;
+    private PropertyType type;
     private String price;
 
     public static PropertyResponseDto fromEntity(Property property){
@@ -26,6 +26,7 @@ public class PropertyResponseDto {
                 .address(property.getAddress())
                 .description(property.getDescription())
                 .status(property.getStatus())
+                .type(property.getPropertyType())
                 .price(property.getPrice())
                 .build();
     }
