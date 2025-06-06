@@ -25,7 +25,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
     private static final List<String> whiteList = Arrays.asList(
-            "/h2", "/favicon", "/api/health", "/api/register", "/api/login", "/api/reissue");
+            "/h2", "/favicon", "/api/health", "/api/register", "/api/login", "/api/reissue", "/swagger-ui", "/swagger-ui.html", "/v3/api-docs", "/webjars/");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
