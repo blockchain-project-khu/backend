@@ -115,4 +115,16 @@ public class PropertyService {
         property.update(requestDto);
         return PropertyResponseDto.fromEntity(property);
     }
+
+    // [추가] 자기가 등록한 매물 리스트 조회
+    public List<PropertyResponseDto> getSales() {
+        Long userId = SecurityUtil.getCurrentMemberId();
+
+        List<Property> sales = propertyRepository.findByUserId(userId);
+
+        return sales.stream()
+                .map(PropertyResponseDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }
