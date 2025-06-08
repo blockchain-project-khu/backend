@@ -21,8 +21,11 @@ public class RentPaymentController {
     private final RentPaymentService rentPaymentService;
 
     @PostMapping
-    public SuccessApiResponse<RentPaymentResponseDto> payRent(@Valid @RequestBody RentPaymentRequestDto requestDto) {
-        RentPaymentResponseDto rentPaymentResponseDto = rentPaymentService.payRent(requestDto);
+    public SuccessApiResponse<RentPaymentResponseDto> payRent(
+            @Valid @RequestBody RentPaymentRequestDto requestDto,
+            @CurrentUser User user
+    ) {
+        RentPaymentResponseDto rentPaymentResponseDto = rentPaymentService.payRent(requestDto, user.getId());
         return SuccessApiResponse.payRent(rentPaymentResponseDto);
     }
 

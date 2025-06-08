@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,9 +26,13 @@ public class RentPaymentService {
     private final PropertyRepository propertyRepository;
 
     @Transactional
-    public RentPaymentResponseDto payRent(RentPaymentRequestDto requestDto) {
+    public RentPaymentResponseDto payRent(RentPaymentRequestDto requestDto, Long currentUserId) {
         Rent rent = rentRepository.findById(requestDto.getRentId())
                 .orElseThrow(RentException.RentNotFoundException::new);
+
+        if (!Objects.equals(rent.getUser().getId(), currentUserId)) {
+            throw new IllegalArgumentException("본인이 생성한 임대 계약이 아닙니다.");
+        }
 
         RentPayment payment = requestDto.toEntity(rent);
         RentPayment saved = rentPaymentRepository.save(payment);
