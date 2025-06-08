@@ -21,12 +21,12 @@ public class RentPaymentController {
 
     private final RentPaymentService rentPaymentService;
 
-    @PostMapping
+    @PostMapping("/{propertyId}")
     public SuccessApiResponse<RentPaymentResponseDto> payRent(
-            @Valid @RequestBody RentPaymentRequestDto requestDto,
+            @PathVariable Long propertyId,
             @Parameter(hidden = true) @CurrentUser User user
     ) {
-        RentPaymentResponseDto rentPaymentResponseDto = rentPaymentService.payRent(requestDto, user.getId());
+        RentPaymentResponseDto rentPaymentResponseDto = rentPaymentService.payRent(propertyId, user.getId());
         return SuccessApiResponse.payRent(rentPaymentResponseDto);
     }
 
