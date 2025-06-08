@@ -30,7 +30,7 @@ public class RentService {
                 .property(property)
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
-                .monthlyRent(dto.getMonthlyRent())
+                .monthlyRent(property.getMonthlyRent())
                 .deposit(dto.getDeposit())
                 .paymentDay(dto.getPaymentDay())
                 .status(RentStatus.ACTIVE)

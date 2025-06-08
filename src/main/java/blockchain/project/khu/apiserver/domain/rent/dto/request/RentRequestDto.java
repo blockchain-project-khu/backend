@@ -18,9 +18,6 @@ public class RentRequestDto {
     @Schema(description = "임대 종료일 (YYYY-MM-DD)", example = "2025-12-25")
     private LocalDate endDate;
 
-    @Schema(description = "월세 금액", example = "700000")
-    private BigDecimal monthlyRent;
-
     @Schema(description = "보증금", example = "6000000")
     private BigDecimal deposit;
 
