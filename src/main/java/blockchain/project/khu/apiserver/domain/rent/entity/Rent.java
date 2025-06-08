@@ -33,16 +33,16 @@ public class Rent {
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @Column(name = "monthly_rent", nullable = false)
     private BigDecimal monthlyRent;
 
-    @Column(name = "deposit", nullable = false)
+    @Column(name = "deposit")
     private BigDecimal deposit;
 
     @Enumerated(EnumType.STRING)
