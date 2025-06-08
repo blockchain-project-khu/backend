@@ -27,14 +27,15 @@ public class Funding {
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 
-    @Column(name = "amount", nullable = false)
-    private Integer amount;
+    @Column(name = "percentage", nullable = false)
+    private Integer percentage;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private FundingStatus status;
 
     public void updateFunding(FundingRequestDto requestDto){
-        this.amount = requestDto.getAmount();
+        this.percentage = requestDto.getPercentage();
     }
 
     public void updateFundingStatus(FundingStatus status){

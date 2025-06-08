@@ -13,13 +13,13 @@ import lombok.Data;
 public class FundingRequestDto {
 
     @NotNull(message = "펀딩할 지분은 필수입니다.")
-    private Integer amount;
+    private Integer percentage;
 
     public Funding toEntity(User user, Property property, FundingRequestDto dto){
         return Funding.builder()
                 .user(user)
                 .property(property)
-                .amount(dto.getAmount())
+                .percentage(dto.getPercentage())
                 .status(FundingStatus.REQUESTED)
                 .build();
     }

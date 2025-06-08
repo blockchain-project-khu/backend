@@ -8,15 +8,12 @@ import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyRes
 import blockchain.project.khu.apiserver.domain.property.entity.Property;
 import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
 import blockchain.project.khu.apiserver.domain.user.entity.User;
-import blockchain.project.khu.apiserver.domain.user.jwt.JWTUtil;
 import blockchain.project.khu.apiserver.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Security;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,15 +24,65 @@ public class PropertyService {
 
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
+    private final PropertyContractService propertyContractService;
     // 등록
     public PropertyResponseDto createProperty(PropertyRequestDto request){
         Long userId = SecurityUtil.getCurrentMemberId();
         User user = userRepository.findById(userId).orElseThrow(UserException.UsernameNotExistException::new);
 
-        Property property = request.toEntity(user);
+        // 1. 블록체인 등록 전 propertyCount 조회
+        BigInteger beforeCount;
+        try {
+            beforeCount = propertyContractService.getPropertyCount();
+        } catch (Exception ex) {
+            throw new RuntimeException("블록체인에서 propertyCount 조회 실패", ex);
+        }
 
-        propertyRepository.save(property);
+        BigInteger newBlockchainIdBI = beforeCount.add(BigInteger.ONE);
+        Long newBlockchainId = newBlockchainIdBI.longValue();
 
+        Property property = request.toEntity(user, newBlockchainId);
+        Property savedProperty = propertyRepository.save(property);
+
+
+        // 2. 블록체인에 registerProperty 트랜잭션 전송
+        try {
+            propertyContractService.registerProperty(
+                    savedProperty.getId(),
+                    new BigInteger("1000000000000000000"), // 1 KAIA
+                    BigInteger.valueOf(3600 * 24 * 7),     // 일주일(초)
+                    new BigInteger("10000000000000000")    // 0.01 KAIA
+            );
+        } catch (Exception ex) {
+            throw new RuntimeException("블록체인에 registerProperty 전송 실패", ex);
+        }
+
+        // 3. 블록체인 등록 후 propertyCount 조회 및 정상 여부 확인
+        BigInteger afterCount;
+        try {
+            afterCount = propertyContractService.getPropertyCount();
+        } catch (Exception ex) {
+            throw new RuntimeException("블록체인에서 등록 후 propertyCount 조회 실패", ex);
+        }
+
+        if (!afterCount.equals(beforeCount.add(BigInteger.ONE))) {
+            throw new RuntimeException(
+                    "registerProperty 후 propertyCount가 기대값과 다릅니다. before=" +
+                            beforeCount + ", after=" + afterCount
+            );
+        }
+
+        // 4. (선택) 등록된 매물 ID로 sharePrice 조회
+        BigInteger newPropertyId = afterCount;
+        BigInteger sharePriceWei;
+        try {
+            sharePriceWei = propertyContractService.getSharePrice(newPropertyId);
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                    "블록체인에서 getSharePrice 조회 실패 (propertyId=" + newPropertyId + ")",
+                    ex
+            );
+        }
         return PropertyResponseDto.fromEntity(property);
     }
 

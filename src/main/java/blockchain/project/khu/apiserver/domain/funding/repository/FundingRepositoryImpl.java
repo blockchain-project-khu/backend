@@ -24,7 +24,7 @@ public class FundingRepositoryImpl implements FundingRepositoryCustom{
         return jpaQueryFactory
                 .select(new QFundingResponseDto(
                         f.id,
-                        f.amount,
+                        f.percentage,
                         f.status,
                         f.user.id,
                         f.property.id
@@ -42,7 +42,7 @@ public class FundingRepositoryImpl implements FundingRepositoryCustom{
         return jpaQueryFactory
                 .select(new QFundingResponseDto(
                         f.id,
-                        f.amount,
+                        f.percentage,
                         f.status,
                         f.user.id,
                         f.property.id
