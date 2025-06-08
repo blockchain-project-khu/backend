@@ -54,25 +54,6 @@ public class RentPaymentService {
                 .toList();
     }
 
-    public List<PropertyPaymentResponseDto> getReceivedByProperty(Long ownerId) {
-        return propertyRepository.findByUserId(ownerId)
-                .stream()
-                .map(property -> {
-                    List<Long> rentIds = rentRepository
-                            .findByPropertyId(property.getId())
-                            .stream()
-                            .map(Rent::getId)
-                            .toList();
-
-                    List<RentPayment> payments = rentIds.stream()
-                            .flatMap(id -> rentPaymentRepository.findByRentId(id).stream())
-                            .toList();
-
-                    return PropertyPaymentResponseDto.fromEntity(property, payments);
-                })
-                .toList();
-    }
-
     public List<RentPaymentResponseDto> getPaymentsByPropertyId(Long propertyId) {
         List<Rent> rents = rentRepository.findByPropertyId(propertyId);
 
