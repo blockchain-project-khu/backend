@@ -29,18 +29,6 @@ public class SwaggerConfig {
                 .addSecurityItem(new SecurityRequirement().addList("accessToken"));
     }
 
-    @Bean
-    public OperationCustomizer customizeCurrentUserParameter() {
-        return (operation, handlerMethod) -> {
-            if (handlerMethod.hasMethodAnnotation(CurrentUser.class)) {
-                operation.getParameters().removeIf(
-                        param -> param.getName().equals("currentUser")
-                );
-            }
-            return operation;
-        };
-    }
-
     private Info apiInfo() {
         return new Info()
                 .title("BlockEstate Backend API Docs")
