@@ -1,11 +1,13 @@
 package blockchain.project.khu.apiserver.common.config;
 
+import blockchain.project.khu.apiserver.common.annotation.CurrentUser;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -25,6 +27,18 @@ public class SwaggerConfig {
                 .components(components())
                 .info(apiInfo())
                 .addSecurityItem(new SecurityRequirement().addList("accessToken"));
+    }
+
+    @Bean
+    public OperationCustomizer customizeCurrentUserParameter() {
+        return (operation, handlerMethod) -> {
+            if (handlerMethod.hasMethodAnnotation(CurrentUser.class)) {
+                operation.getParameters().removeIf(
+                        param -> param.getName().equals("currentUser")
+                );
+            }
+            return operation;
+        };
     }
 
     private Info apiInfo() {
