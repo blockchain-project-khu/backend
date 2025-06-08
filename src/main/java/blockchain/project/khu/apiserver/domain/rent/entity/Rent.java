@@ -10,7 +10,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "rent")
+@Table(
+        name = "rent",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "property_id"})
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
