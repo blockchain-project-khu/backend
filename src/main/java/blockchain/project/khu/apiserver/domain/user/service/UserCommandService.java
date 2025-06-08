@@ -55,6 +55,11 @@ public class UserCommandService {
         String accessToken = jwtUtil.createJwt(user.getId(),"access", user.getUsername(), user.getRole(), 10 * 60 * 1000L); // 10분
         String refreshToken = jwtUtil.createJwt(user.getId(),"refresh", user.getUsername(), user.getRole(), 24 * 60 * 60 * 1000L); // 1일
 
+        //
+        System.out.println("accessToken = " + accessToken);
+        System.out.println("refreshToken = " + refreshToken);
+        //
+
         String redisRefreshKey = "refresh:userId:" + user.getId();
         stringRedisTemplate.opsForValue().set(redisRefreshKey, refreshToken, 1, TimeUnit.DAYS);
 

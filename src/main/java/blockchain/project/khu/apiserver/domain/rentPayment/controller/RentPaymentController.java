@@ -9,6 +9,7 @@ import blockchain.project.khu.apiserver.domain.rentPayment.service.RentPaymentSe
 import blockchain.project.khu.apiserver.domain.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,5 +49,14 @@ public class RentPaymentController {
     ) {
         List<RentPaymentResponseDto> result = rentPaymentService.getPaymentsByPropertyId(propertyId);
         return SuccessApiResponse.getPaymentsByPropertyId(result);
+    }
+
+    // ###########3수정 필요
+    @GetMapping("/sendBy-property")
+    public ResponseEntity<List<PropertyPaymentResponseDto>> getSendPaymentsByProperty(
+            @CurrentUser User user
+    ) {
+        return ResponseEntity.ok().body(rentPaymentService.getUserPaymentsGroupedByProperty(user.getId()));
+
     }
 }

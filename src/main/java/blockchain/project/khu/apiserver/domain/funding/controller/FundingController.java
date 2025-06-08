@@ -6,6 +6,7 @@ import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingRespo
 import blockchain.project.khu.apiserver.domain.funding.entity.FundingStatus;
 import blockchain.project.khu.apiserver.domain.funding.service.FundingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.plaf.synth.SynthColorChooserUI;
