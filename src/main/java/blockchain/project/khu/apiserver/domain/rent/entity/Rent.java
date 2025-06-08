@@ -49,7 +49,7 @@ public class Rent {
     @Column(nullable = false)
     private RentStatus status;  // e.g., ACTIVE, ENDED, CANCELLED
 
-    @Column(name = "payment_day", nullable = false)
+    @Column(name = "payment_day")
     private Integer paymentDay;  // 매달 납부일 (예: 5)
 }
 
