@@ -27,12 +27,9 @@ public class RentPaymentService {
 
     @Transactional
     public RentPaymentResponseDto payRent(RentPaymentRequestDto requestDto, Long currentUserId) {
-        Rent rent = rentRepository.findById(requestDto.getRentId())
-                .orElseThrow(RentException.RentNotFoundException::new);
-
-        if (!Objects.equals(rent.getUser().getId(), currentUserId)) {
-            throw new IllegalArgumentException("본인이 생성한 임대 계약이 아닙니다.");
-        }
+        Rent rent = rentRepository.findByPropertyIdAndUserId(
+                requestDto.getPropertyId(), currentUserId
+        ).orElseThrow(() -> new IllegalArgumentException("해당 propertyId에 대한 임대 계약이 존재하지 않거나 본인의 계약이 아닙니다."));
 
         RentPayment payment = requestDto.toEntity(rent);
         RentPayment saved = rentPaymentRepository.save(payment);

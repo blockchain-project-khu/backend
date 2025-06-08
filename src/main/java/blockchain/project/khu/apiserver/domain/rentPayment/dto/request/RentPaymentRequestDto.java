@@ -15,8 +15,8 @@ import java.time.LocalDate;
 @Builder
 public class RentPaymentRequestDto {
 
-    @NotNull(message = "rentId는 필수입니다.")
-    private Long rentId;
+    @NotNull(message = "propertyId는 필수입니다.")
+    private Long propertyId;
 
     public RentPayment toEntity(Rent rent) {
         return RentPayment.builder()
