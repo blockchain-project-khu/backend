@@ -76,4 +76,15 @@ public class RentPaymentService {
                 .map(RentPaymentResponseDto::fromEntity)
                 .toList();
     }
+
+    public List<RentPaymentResponseDto> getMyPaymentsByPropertyId(Long propertyId, Long currentUserId) {
+        List<Rent> rents = rentRepository.findByPropertyId(propertyId);
+
+        return rents.stream()
+                .filter(rent -> rent.getUser().getId().equals(currentUserId))
+                .flatMap(rent -> rentPaymentRepository.findByRentId(rent.getId()).stream())
+                .map(RentPaymentResponseDto::fromEntity)
+                .toList();
+    }
+
 }

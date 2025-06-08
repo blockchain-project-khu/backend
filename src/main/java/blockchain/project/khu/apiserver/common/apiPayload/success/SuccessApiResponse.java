@@ -94,6 +94,10 @@ public class SuccessApiResponse <T> extends BaseApiResponse {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "특정 매물 월세 납부 내역 조회 성공", result);
     }
 
+    public static SuccessApiResponse<List<RentPaymentResponseDto>> getMyPaymentsByPropertyId(List<RentPaymentResponseDto> result) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "특정 매물 별 나의 월세 납부 내역 조회 성공", result);
+    }
+
     public static <T> SuccessApiResponse<T> success(T data, String message) {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), message, data);
     }
