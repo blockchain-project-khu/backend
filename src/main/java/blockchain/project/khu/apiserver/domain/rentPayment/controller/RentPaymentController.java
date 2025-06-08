@@ -7,6 +7,7 @@ import blockchain.project.khu.apiserver.domain.rentPayment.dto.request.RentPayme
 import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.rentPayment.service.RentPaymentService;
 import blockchain.project.khu.apiserver.domain.user.entity.User;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class RentPaymentController {
     @PostMapping
     public SuccessApiResponse<RentPaymentResponseDto> payRent(
             @Valid @RequestBody RentPaymentRequestDto requestDto,
-            @CurrentUser User user
+            @Parameter(hidden = true) @CurrentUser User user
     ) {
         RentPaymentResponseDto rentPaymentResponseDto = rentPaymentService.payRent(requestDto, user.getId());
         return SuccessApiResponse.payRent(rentPaymentResponseDto);
@@ -31,7 +32,7 @@ public class RentPaymentController {
 
     @GetMapping("/my")
     public SuccessApiResponse<List<RentPaymentResponseDto>> getMyPayments(
-            @CurrentUser User user
+            @Parameter(hidden = true) @CurrentUser User user
     ) {
         List<RentPaymentResponseDto> result = rentPaymentService.getMyPayments(user.getId());
         return SuccessApiResponse.getMyPayments(result);
@@ -39,7 +40,7 @@ public class RentPaymentController {
 
     @GetMapping("/by-property")
     public SuccessApiResponse<List<PropertyPaymentResponseDto>> getPaymentsByProperty(
-            @CurrentUser User user
+            @Parameter(hidden = true) @CurrentUser User user
     ) {
         List<PropertyPaymentResponseDto> result = rentPaymentService.getReceivedByProperty(user.getId());
         return SuccessApiResponse.getPaymentsByProperty(result);
@@ -56,7 +57,7 @@ public class RentPaymentController {
     @GetMapping("/property/{propertyId}/my-payments")
     public SuccessApiResponse<List<RentPaymentResponseDto>> getMyPaymentsByPropertyId(
             @PathVariable Long propertyId,
-            @CurrentUser User currentUser
+            @Parameter(hidden = true) @CurrentUser User currentUser
     ) {
         List<RentPaymentResponseDto> result = rentPaymentService.getMyPaymentsByPropertyId(propertyId, currentUser.getId());
         return SuccessApiResponse.getMyPaymentsByPropertyId(result);

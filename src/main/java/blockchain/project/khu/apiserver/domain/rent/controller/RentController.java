@@ -6,6 +6,7 @@ import blockchain.project.khu.apiserver.domain.rent.dto.response.RentResponseDto
 import blockchain.project.khu.apiserver.domain.rent.entity.Rent;
 import blockchain.project.khu.apiserver.domain.rent.service.RentService;
 import blockchain.project.khu.apiserver.domain.user.entity.User;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class RentController {
     @PostMapping
     public ResponseEntity<RentResponseDto.Detail> createRent(
             @RequestBody RentRequestDto dto,
-            @CurrentUser User user
+            @Parameter(hidden = true) @CurrentUser User user
     ) {
         Rent rent = rentService.createRent(dto, user.getId());
         return ResponseEntity.ok(RentResponseDto.Detail.from(rent));
