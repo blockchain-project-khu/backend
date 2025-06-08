@@ -6,6 +6,7 @@ import blockchain.project.khu.apiserver.domain.rent.dto.response.RentResponseDto
 import blockchain.project.khu.apiserver.domain.rent.entity.Rent;
 import blockchain.project.khu.apiserver.domain.rent.service.RentService;
 import blockchain.project.khu.apiserver.domain.user.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class RentController {
     private final RentService rentService;
 
     @PostMapping
+    @Operation(summary = "특정 매물에 대한 임대 계약 생성", description = "특정 매물에 대한 임대 계약을 생성합니다. 계약에 관한 모든 정보를 요청으로 받아 처리 후 생성된 계약 정보를 반환합니다.")
     public ResponseEntity<RentResponseDto.Detail> createRent(
             @RequestBody RentRequestDto dto,
             @Parameter(hidden = true) @CurrentUser User user

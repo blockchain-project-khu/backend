@@ -1,11 +1,8 @@
 package blockchain.project.khu.apiserver.domain.rentPayment.service;
 
-import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.RentException;
-import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
 import blockchain.project.khu.apiserver.domain.rent.entity.Rent;
 import blockchain.project.khu.apiserver.domain.rent.repository.RentRepository;
-import blockchain.project.khu.apiserver.domain.rentPayment.dto.request.RentPaymentRequestDto;
 import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.rentPayment.entity.RentPayment;
 import blockchain.project.khu.apiserver.domain.rentPayment.enumerate.PaymentStatus;
@@ -16,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
