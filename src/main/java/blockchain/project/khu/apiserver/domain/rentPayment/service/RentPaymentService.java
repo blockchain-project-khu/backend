@@ -1,6 +1,5 @@
 package blockchain.project.khu.apiserver.domain.rentPayment.service;
 
-import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
 import blockchain.project.khu.apiserver.domain.rent.entity.Rent;
 import blockchain.project.khu.apiserver.domain.rent.repository.RentRepository;
 import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
@@ -21,7 +20,6 @@ public class RentPaymentService {
 
     private final RentRepository rentRepository;
     private final RentPaymentRepository rentPaymentRepository;
-    private final PropertyRepository propertyRepository;
 
     @Transactional
     public RentPaymentResponseDto payRent(Long propertyId, Long currentUserId) {
