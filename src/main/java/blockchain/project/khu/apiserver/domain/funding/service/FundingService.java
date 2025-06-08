@@ -5,18 +5,23 @@ import blockchain.project.khu.apiserver.common.apiPayload.failure.customExceptio
 import blockchain.project.khu.apiserver.common.apiPayload.failure.customException.UserException;
 import blockchain.project.khu.apiserver.common.util.SecurityUtil;
 import blockchain.project.khu.apiserver.domain.funding.dto.request.FundingRequestDto;
+import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingIncomeResponseDto;
 import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingResponseDto;
 import blockchain.project.khu.apiserver.domain.funding.entity.Funding;
 import blockchain.project.khu.apiserver.domain.funding.entity.FundingStatus;
 import blockchain.project.khu.apiserver.domain.funding.repository.FundingRepository;
 import blockchain.project.khu.apiserver.domain.property.entity.Property;
 import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
+import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
+import blockchain.project.khu.apiserver.domain.rentPayment.entity.RentPayment;
+import blockchain.project.khu.apiserver.domain.rentPayment.repository.RentPaymentRepository;
 import blockchain.project.khu.apiserver.domain.user.entity.User;
 import blockchain.project.khu.apiserver.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -27,6 +32,7 @@ public class FundingService {
     private final FundingRepository fundingRepository;
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
+    private final RentPaymentRepository rentPaymentRepository;
 
     // 펀딩 생성
     public Long createFunding(Long propertyId, FundingRequestDto requestDto){
@@ -131,4 +137,31 @@ public class FundingService {
         }
         fundingRepository.delete(funding);
     }
+
+
+    public List<FundingIncomeResponseDto> getMyRentalIncome(Long userId) {
+        List<Funding> fundings = fundingRepository.findByUserIdAndStatus(userId, FundingStatus.COMPLETED);
+
+        return fundings.stream()
+                .map(funding -> {
+                    Long propertyId = funding.getProperty().getId();
+                    Integer percentage = funding.getPercentage();  // 예: 20
+
+                    List<RentPayment> payments = rentPaymentRepository.findByRent_Property_Id(propertyId);
+
+                    // 각 payment에 대해 펀딩 비율 적용
+                    List<RentPaymentResponseDto> adjustedPayments = payments.stream()
+                            .map(p -> RentPaymentResponseDto.fromEntityWithAdjustedAmount(p, percentage))
+                            .toList();
+
+                    // 조정된 amount만 합산
+                    BigDecimal income = adjustedPayments.stream()
+                            .map(RentPaymentResponseDto::getAmount)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                    return FundingIncomeResponseDto.of(propertyId, percentage, income, adjustedPayments);
+                })
+                .toList();
+    }
+
 }

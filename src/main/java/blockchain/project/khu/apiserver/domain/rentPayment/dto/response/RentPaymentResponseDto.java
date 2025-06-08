@@ -36,4 +36,21 @@ public class RentPaymentResponseDto {
                 .status(payment.getStatus())
                 .build();
     }
+
+    // 펀딩 비율을 반영한 amount 계산
+    public static RentPaymentResponseDto fromEntityWithAdjustedAmount(RentPayment payment, Integer percentage) {
+        BigDecimal adjusted = payment.getAmount()
+                .multiply(BigDecimal.valueOf(percentage))
+                .divide(BigDecimal.valueOf(100));
+
+        return RentPaymentResponseDto.builder()
+                .paymentId(payment.getId())
+                .rentId(payment.getRent().getId())
+                .userId(payment.getRent().getUser().getId())
+                .propertyId(payment.getRent().getProperty().getId())
+                .amount(adjusted)
+                .paidAt(payment.getPaidAt())
+                .status(payment.getStatus())
+                .build();
+    }
 }

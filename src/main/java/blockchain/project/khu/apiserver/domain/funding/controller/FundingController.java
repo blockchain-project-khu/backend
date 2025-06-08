@@ -1,14 +1,18 @@
 package blockchain.project.khu.apiserver.domain.funding.controller;
 
+import blockchain.project.khu.apiserver.common.annotation.CurrentUser;
 import blockchain.project.khu.apiserver.common.apiPayload.success.SuccessApiResponse;
 import blockchain.project.khu.apiserver.domain.funding.dto.request.FundingRequestDto;
 import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingResponseDto;
 import blockchain.project.khu.apiserver.domain.funding.entity.FundingStatus;
 import blockchain.project.khu.apiserver.domain.funding.service.FundingService;
+import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingIncomeResponseDto;
+import blockchain.project.khu.apiserver.domain.user.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.plaf.synth.SynthColorChooserUI;
 import java.util.List;
 
 @RestController
@@ -84,4 +88,15 @@ public class FundingController {
         fundingService.deleteFunding(fundingId);
         return SuccessApiResponse.deleteFunding();
     }
+
+    // 펀딩 수익 조회
+    @Operation(summary = "펀딩 수익 조회", description = "내가 펀딩한 매물의 월세 수익 내역을 확인합니다.")
+    @GetMapping("/me/income")
+    public SuccessApiResponse<List<FundingIncomeResponseDto>> getMyFundingIncome(
+            @Parameter(hidden = true) @CurrentUser User user
+    ) {
+        List<FundingIncomeResponseDto> result = fundingService.getMyRentalIncome(user.getId());
+        return SuccessApiResponse.getMyFundingIncome(result);
+    }
+
 }

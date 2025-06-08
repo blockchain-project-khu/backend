@@ -4,6 +4,7 @@ import blockchain.project.khu.apiserver.common.apiPayload.BaseApiResponse;
 import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingResponseDto;
 import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyResponseDto;
+import blockchain.project.khu.apiserver.domain.funding.dto.response.FundingIncomeResponseDto;
 import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.user.dto.response.LoginResponse;
 import lombok.Getter;
@@ -98,7 +99,7 @@ public class SuccessApiResponse <T> extends BaseApiResponse {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "특정 매물 별 나의 월세 납부 내역 조회 성공", result);
     }
 
-    public static <T> SuccessApiResponse<T> success(T data, String message) {
-        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), message, data);
+    public static SuccessApiResponse<List<FundingIncomeResponseDto>> getMyFundingIncome(List<FundingIncomeResponseDto> result) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "펀딩한 매물에 대해 월세 수익 리스트 조회 성공", result);
     }
 }
