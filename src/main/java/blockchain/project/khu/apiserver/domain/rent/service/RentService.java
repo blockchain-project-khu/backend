@@ -19,8 +19,8 @@ public class RentService {
     private final UserRepository userRepository;
     private final PropertyRepository propertyRepository;
 
-    public Rent createRent(RentRequestDto dto) {
-        User user = userRepository.findById(dto.getUserId())
+    public Rent createRent(RentRequestDto dto, Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         Property property = propertyRepository.findById(dto.getPropertyId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매물입니다."));

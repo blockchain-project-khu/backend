@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Getter
 public class RentRequestDto {
-    private Long userId;
     private Long propertyId;
     private LocalDate startDate;
     private LocalDate endDate;
