@@ -18,14 +18,10 @@ public class RentPaymentRequestDto {
     @NotNull(message = "rentId는 필수입니다.")
     private Long rentId;
 
-    @NotNull(message = "amount는 필수입니다.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "금액은 0보다 커야 합니다.")
-    private BigDecimal amount;
-
     public RentPayment toEntity(Rent rent) {
         return RentPayment.builder()
                 .rent(rent)
-                .amount(amount)
+                .amount(rent.getMonthlyRent())
                 .paidAt(LocalDate.now())
                 .status(PaymentStatus.PAID)
                 .build();
