@@ -11,6 +11,7 @@ import blockchain.project.khu.apiserver.domain.funding.entity.Funding;
 import blockchain.project.khu.apiserver.domain.funding.entity.FundingStatus;
 import blockchain.project.khu.apiserver.domain.funding.repository.FundingRepository;
 import blockchain.project.khu.apiserver.domain.property.entity.Property;
+import blockchain.project.khu.apiserver.domain.property.entity.PropertyStatus;
 import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
 import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.rentPayment.entity.RentPayment;
@@ -140,7 +141,7 @@ public class FundingService {
 
 
     public List<FundingIncomeResponseDto> getMyRentalIncome(Long userId) {
-        List<Funding> fundings = fundingRepository.findByUserIdAndStatus(userId, FundingStatus.COMPLETED);
+        List<Funding> fundings = fundingRepository.findByUserIdAndProperty_Status(userId, PropertyStatus.SOLD);
 
         return fundings.stream()
                 .map(funding -> {
