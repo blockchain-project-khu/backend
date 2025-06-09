@@ -13,6 +13,7 @@ import blockchain.project.khu.apiserver.domain.funding.repository.FundingReposit
 import blockchain.project.khu.apiserver.domain.property.entity.Property;
 import blockchain.project.khu.apiserver.domain.property.entity.PropertyStatus;
 import blockchain.project.khu.apiserver.domain.property.repository.PropertyRepository;
+import blockchain.project.khu.apiserver.domain.property.service.PropertyService;
 import blockchain.project.khu.apiserver.domain.rentPayment.dto.response.RentPaymentResponseDto;
 import blockchain.project.khu.apiserver.domain.rentPayment.entity.RentPayment;
 import blockchain.project.khu.apiserver.domain.rentPayment.repository.RentPaymentRepository;
@@ -34,6 +35,7 @@ public class FundingService {
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
     private final RentPaymentRepository rentPaymentRepository;
+    private final PropertyService propertyService;
 
     // 펀딩 생성
     public Long createFunding(Long propertyId, FundingRequestDto requestDto){
@@ -68,11 +70,20 @@ public class FundingService {
         property.addFundingEntity(funding);
 
         if(property.getCurrentFundingPercent() == 100) {
+            // 매물 상태 변경
             property.updatePropertyStatus();
+
+            // 펀딩 상태 변경
+            for(Funding fundingByProperty: fundingRepository.findAllByProperty(property)){
+                fundingByProperty.updateFundingStatus(FundingStatus.COMPLETED);
+            }
+            funding.updateFundingStatus(FundingStatus.COMPLETED);
         }
 
         return fundingRepository.save(funding).getId();
     }
+
+
 
     // 펀딩 단건 조회
     public FundingResponseDto getFunding(Long fundingId){

@@ -115,4 +115,15 @@ public class PropertyService {
         property.update(requestDto);
         return PropertyResponseDto.fromEntity(property);
     }
+
+    // 판매 매물 조회
+    public List<PropertyResponseDto> getSales() {
+        Long userId = SecurityUtil.getCurrentMemberId();
+
+        List<Property> sales = propertyRepository.findByUserId(userId);
+
+        return sales.stream()
+                .map(PropertyResponseDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

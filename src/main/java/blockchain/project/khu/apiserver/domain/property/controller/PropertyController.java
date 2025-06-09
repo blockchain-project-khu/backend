@@ -6,6 +6,7 @@ import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyRes
 import blockchain.project.khu.apiserver.domain.property.service.PropertyService;
 import com.sun.net.httpserver.Authenticator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,5 +54,12 @@ public class PropertyController {
     public SuccessApiResponse<Void> deleteProperty(@PathVariable Long propertyId){
         propertyService.deleteProperty(propertyId);
         return SuccessApiResponse.deleteProperty();
+    }
+
+    // 사용자의 판매 매물 리스트 조회
+    @GetMapping("/sales")
+    public SuccessApiResponse<List<PropertyResponseDto>> getSales(){
+
+        return SuccessApiResponse.getSales(propertyService.getSales());
     }
 }
