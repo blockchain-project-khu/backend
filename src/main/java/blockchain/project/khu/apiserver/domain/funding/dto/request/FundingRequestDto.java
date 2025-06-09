@@ -20,7 +20,7 @@ public class FundingRequestDto {
                 .user(user)
                 .property(property)
                 .percentage(dto.getPercentage())
-                .status(FundingStatus.REQUESTED)
+                .status(FundingStatus.ACCEPTED)
                 .build();
     }
 }
