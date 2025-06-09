@@ -48,8 +48,8 @@ public class PropertyContractService {
         RawTransactionManager txManager = new RawTransactionManager(web3j, credentials, 1001L); // 1001: KAIA 체인ID
 
         // 4. 가스 가격/한도 명시적으로 지정
-        BigInteger gasPrice = new BigInteger("210000000000"); // 210 gwei = 210,000,000,000 wei
-        BigInteger gasLimit = new BigInteger("300000");      // 충분한 가스 한도
+        BigInteger gasPrice = new BigInteger("2100000000000"); // 210 gwei = 210,000,000,000 wei
+        BigInteger gasLimit = new BigInteger("3000000");      // 충분한 가스 한도
 
         // 5. 트랜잭션 전송
         EthSendTransaction response = txManager.sendTransaction(
