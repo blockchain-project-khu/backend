@@ -1,6 +1,7 @@
 package blockchain.project.khu.apiserver.domain.rent.controller;
 
 import blockchain.project.khu.apiserver.common.annotation.CurrentUser;
+import blockchain.project.khu.apiserver.common.apiPayload.success.SuccessApiResponse;
 import blockchain.project.khu.apiserver.domain.property.dto.response.PropertyResponseDto;
 import blockchain.project.khu.apiserver.domain.rent.dto.request.RentRequestDto;
 import blockchain.project.khu.apiserver.domain.rent.dto.response.RentResponseDto;
@@ -34,10 +35,10 @@ public class RentController {
 
     @GetMapping
     @Operation(summary = "로그인한 사용자의 임대한 건물 리스트 조회", description = "로그인한 사용자의 임대한 건물 리스트를 조회합니다.")
-    public ResponseEntity<List<PropertyResponseDto>> getRent(
+    public SuccessApiResponse<List<PropertyResponseDto>> getRent(
             @Parameter(hidden = true) @CurrentUser User currentUser
     ) {
-        List<PropertyResponseDto> result = rentService.getRentPropertyList(currentUser.getId());
-        return ResponseEntity.ok(result);
+        return SuccessApiResponse.getRent(rentService.getRentPropertyList(currentUser.getId()));
     }
 }
+
