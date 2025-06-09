@@ -56,6 +56,10 @@ public class SuccessApiResponse <T> extends BaseApiResponse {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "매물 삭제 성공", null);
     }
 
+    public static SuccessApiResponse<List<PropertyResponseDto>> getSales(List<PropertyResponseDto> responseDtoList) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "판매중인 매물 조회 성공", responseDtoList);
+    }
+
     // [FUNDING]
     public static SuccessApiResponse<Long> createFunding(Long fundingId) {
         return new SuccessApiResponse<>(true, HttpStatus.CREATED.toString(), "펀딩 등록 성공", fundingId);
@@ -77,6 +81,10 @@ public class SuccessApiResponse <T> extends BaseApiResponse {
         return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "펀딩 삭제 성공", null);
     }
 
+    // [RENT]
+    public static SuccessApiResponse<List<PropertyResponseDto>> getRent(List<PropertyResponseDto> responseDtoList) {
+        return new SuccessApiResponse<>(true, HttpStatus.OK.toString(), "본인 임대 계약 조회 성공", responseDtoList);
+    }
 
     // [RENT-PAYMENT]
     public static SuccessApiResponse<RentPaymentResponseDto> payRent(RentPaymentResponseDto responseDto) {
